@@ -8,7 +8,7 @@ import os
 # URL to the GitHub release asset
 RELEASE_URL = 'https://github.com/bhavani-65/Reel-Advisor/releases/download/v1.0.0/similarity.tar.gz'
 tar_file_path = 'similarity.tar.gz'
-extract_folder = ' '
+extract_folder = os.path.dirname(tar_file_path)
 
 # Function to download the file from the release URL
 def download_file(url, dest_path):
