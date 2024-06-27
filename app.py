@@ -6,21 +6,21 @@ import pandas as pd
 import os
 
 # URL to the GitHub release asset
-# RELEASE_URL = 'https://github.com/bhavani-65/Reel-Advisor/releases/download/v1.0.0/similarity.tar.gz'
-tar_file_path = 'similarity.tar.gz.part-aa'
-extract_folder = os.path.dirname(tar_file_path)
+RELEASE_URL = 'https://github.com/bhavani-65/Reel-Advisor/releases/download/v1.0.0/similarity.tar.gz'
+tar_file_path = 'similarity.tar.gz'
+extract_folder = 'model/'
 
-# # Function to download the file from the release URL
-# def download_file(url, dest_path):
-#     with requests.get(url, stream=True) as r:
-#         r.raise_for_status()
-#         with open(dest_path, 'wb') as f:
-#             for chunk in r.iter_content(chunk_size=8192):
-#                 f.write(chunk)
+# Function to download the file from the release URL
+def download_file(url, dest_path):
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(dest_path, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
 
-# # Download the tar.gz file if it does not exist
-# if not os.path.exists(tar_file_path):
-#     download_file(RELEASE_URL, tar_file_path)
+# Download the tar.gz file if it does not exist
+if not os.path.exists(tar_file_path):
+    download_file(RELEASE_URL, tar_file_path)
 
 # Extract the tar.gz file
 with tarfile.open(tar_file_path, 'r:gz') as tar:
@@ -44,7 +44,16 @@ def fetch_poster(movie_id):
     return full_path
 
 # Function to recommend movies
-
+def recommend(movie, similarity):
+    movie_index = movies[movies['title'] == movie].index[0]
+    distances = sorted(list(enumerate(similarity[movie_index])), reverse=True, key=lambda x: x[1])
+    recommended_movies = []
+    for i in distances[1:11]:  # Recommend top 10 movies
+        movie_id = movies.iloc[i[0]].movie_id
+        recommended_movies.append({
+            'title': movies.iloc[i[0]].title,
+            'poster_url': fetch_poster(movie_id)
+        })
     return recommended_movies
 
 # Streamlit app starts here
