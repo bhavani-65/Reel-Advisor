@@ -44,16 +44,7 @@ def fetch_poster(movie_id):
     return full_path
 
 # Function to recommend movies
-def recommend(movie, similarity):
-    movie_index = movies[movies['title'] == movie].index[0]
-    distances = sorted(list(enumerate(similarity[movie_index])), reverse=True, key=lambda x: x[1])
-    recommended_movies = []
-    for i in distances[1:11]:  # Recommend top 10 movies
-        movie_id = movies.iloc[i[0]].movie_id
-        recommended_movies.append({
-            'title': movies.iloc[i[0]].title,
-            'poster_url': fetch_poster(movie_id)
-        })
+
     return recommended_movies
 
 # Streamlit app starts here
